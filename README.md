@@ -1,8 +1,8 @@
 # Aval
-**Aval** is a versatile Discord utility bot designed to provide powerful commands, automation, and fun features for your server.
+**Aval** is a versatile Discord selfbot/personal utility bot designed to provide powerful commands, automation, and fun features for your account.
 
 ## 📌 Features
-- Utility commands for moderation and server management.
+- Utility commands for personal use.
 - Fun & interactive commands.
 - API-powered tools and integrations.
 - Highly customizable configuration.
