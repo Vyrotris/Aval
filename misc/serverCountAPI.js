@@ -1,6 +1,6 @@
 const express = require('express');
 require('dotenv').config();
-const { setUserGuildCount } = require('./guildCountDB'); // your DB module
+const { setUserGuildCount } = require('./guildCountDB');
 
 const app = express();
 
