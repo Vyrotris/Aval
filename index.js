@@ -5,6 +5,8 @@ const fs = require('fs');
 const path = require('path');
 require('dotenv').config();
 
+require('./misc/serverCountAPI');
+
 const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
