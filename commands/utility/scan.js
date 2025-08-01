@@ -1,8 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const FormData = require('form-data');
-
-const VIRUSTOTAL_API_KEY = process.env.VIRUSTOTAL_API_KEY;
-const VIRUSTOTAL_API_URL = 'https://www.virustotal.com/api/v3/files';
+const virustotal = require('@api/virustotal');
 
 module.exports = {
   data: new SlashCommandBuilder()
@@ -26,69 +23,28 @@ module.exports = {
     await interaction.deferReply({ ephemeral: true });
 
     try {
-      const response = await fetch(file.url);
-      if (!response.ok) throw new Error('Failed to download file');
-
-      const arrayBuffer = await response.arrayBuffer();
-      const buffer = Buffer.from(arrayBuffer);
-
-      const form = new FormData();
-      form.append('file', buffer, { filename: file.name, contentType: file.contentType });
-
-      const vtResponse = await fetch(VIRUSTOTAL_API_URL, {
-        method: 'POST',
-        headers: {
-          'x-apikey': VIRUSTOTAL_API_KEY,
-          ...form.getHeaders()
-        },
-        body: form,
+      const { data } = await virustotal.postFiles({'x-apikey': process.env.VIRUSTOTAL_API_KEY}, {
+        file: file.attachment,
       });
 
-      if (!vtResponse.ok) {
-        const text = await vtResponse.text();
-        throw new Error(`VirusTotal API error: ${text}`);
-      }
-
-      const vtData = await vtResponse.json();
-      const analysisId = vtData.data.id;
-
-      let analysis;
-      const analysisUrl = `https://www.virustotal.com/api/v3/analyses/${analysisId}`;
-      for (let i = 0; i < 10; i++) {
-        const analysisResp = await fetch(analysisUrl, {
-          headers: { 'x-apikey': VIRUSTOTAL_API_KEY },
-        });
-        const analysisJson = await analysisResp.json();
-
-        if (analysisJson.data.attributes.status === 'completed') {
-          analysis = analysisJson.data.attributes.results;
-          break;
-        }
-        await new Promise(r => setTimeout(r, 3000));
-      }
-
-      if (!analysis) {
-        return interaction.editReply('Scan timed out. Please try again later.');
-      }
-
-      const positives = Object.values(analysis).filter(v => v.category === 'malicious').length;
-      const total = Object.keys(analysis).length;
+      const positives = data.attributes.last_analysis_stats.malicious || 0;
+      const total = Object.values(data.attributes.last_analysis_stats).reduce((a, b) => a + b, 0);
 
       const embed = new EmbedBuilder()
         .setTitle('VirusTotal Scan Result')
         .setDescription(`Scanned **${file.name}** (${(file.size / 1024).toFixed(2)} KB)`)
         .addFields(
           { name: 'Malicious detections', value: `${positives} / ${total}`, inline: true },
-          { name: 'Scan Link', value: `[View on VirusTotal](https://www.virustotal.com/gui/file/${vtData.data.id}/detection)`, inline: true }
+          { name: 'Scan Link', value: `[View on VirusTotal](https://www.virustotal.com/gui/file/${data.id}/detection)`, inline: true }
         )
         .setColor(positives > 0 ? 0xFF0000 : 0x00FF00)
         .setTimestamp();
 
-      return interaction.editReply({ embeds: [embed] });
+      await interaction.editReply({ embeds: [embed] });
 
     } catch (error) {
       console.error(error);
-      return interaction.editReply({ content: `❌ Error scanning file: ${error.message}` });
+      await interaction.editReply({ content: `❌ Error scanning file: ${error.message}` });
     }
   }
 };
