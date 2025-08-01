@@ -1,9 +1,32 @@
 const { SlashCommandBuilder } = require('discord.js');
 const sqlite3 = require('sqlite3').verbose();
+const fs = require('fs');
 const path = require('path');
 
-const dbPath = path.join(__dirname, '..', 'data', 'authorized.db');
-const db = new sqlite3.Database(dbPath);
+const dbDir = path.join(__dirname, '..', 'data');
+if (!fs.existsSync(dbDir)) {
+    fs.mkdirSync(dbDir, { recursive: true });
+}
+
+const dbPath = path.join(dbDir, 'authorized.db');
+const db = new sqlite3.Database(dbPath, err => {
+    if (err) {
+        console.error('Failed to open DB:', err);
+    } else {
+        console.log('Database opened successfully.');
+        // Create users table if it doesn't exist
+        db.run(`
+            CREATE TABLE IF NOT EXISTS users (
+                id TEXT PRIMARY KEY,
+                guild_count INTEGER,
+                last_updated INTEGER
+            )
+        `, err => {
+            if (err) console.error('Failed to create users table:', err);
+            else console.log('Users table ready.');
+        });
+    }
+});
 
 const clientId = '1399579415297654814';
 const redirectUri = encodeURIComponent('https://avalauth.vyrotris.com/callback');
