@@ -14,7 +14,6 @@ const db = new sqlite3.Database(dbPath, err => {
         console.error('Failed to open DB:', err);
     } else {
         console.log('Database opened successfully.');
-        // Create users table if it doesn't exist
         db.run(`
             CREATE TABLE IF NOT EXISTS users (
                 id TEXT PRIMARY KEY,
