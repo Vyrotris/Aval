@@ -8,17 +8,18 @@ const FormData = require('form-data');
 
 const ytdlp = new YtDlp();
 
-async function uploadTo0x0st(filePath) {
+async function uploadToCatbox(filePath) {
     const fileName = path.basename(filePath);
     const fileStream = fs.createReadStream(filePath);
 
     const form = new FormData();
-    form.append('file', fileStream, fileName);
+    form.append('reqtype', 'fileupload');
+    form.append('fileToUpload', fileStream, fileName);
 
-    const res = await axios.post('https://0x0.st', form, {
+    const res = await axios.post('https://catbox.moe/user/api.php', form, {
         headers: form.getHeaders(),
         maxContentLength: Infinity,
-        maxBodyLength: Infinity
+        maxBodyLength: Infinity,
     });
 
     return res.data.trim();
@@ -27,7 +28,7 @@ async function uploadTo0x0st(filePath) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('ytdl')
-        .setDescription('Download a YouTube video and upload to 0x0.st')
+        .setDescription('Download a YouTube video and upload to catbox.moe')
         .addStringOption(option =>
             option.setName('url')
                 .setDescription('The YouTube video URL')
@@ -50,10 +51,9 @@ module.exports = {
                 },
             });
 
-            await interaction.editReply('📤 Uploading to 0x0.st...');
-            const link = await uploadTo0x0st(outputPath);
+            const link = await uploadToCatbox(outputPath);
 
-            await interaction.editReply(`✅ Uploaded to 0x0.st: ${link}`);
+            await interaction.editReply(`✅ Uploaded: ${link}`);
 
             try {
                 fs.unlinkSync(outputPath);
