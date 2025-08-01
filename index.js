@@ -39,15 +39,15 @@ function loadCommands(dir = path.join(__dirname, 'commands')) {
 
                 if (!client.commands.has(name)) {
                     client.commands.set(name, command);
-                    console.log(`✅ Loaded: ${name} (${path.relative(__dirname, fullPath)})`);
+                    console.log(`Loaded: ${name} (${path.relative(__dirname, fullPath)})`);
                 } else {
-                    console.warn(`⚠️ Duplicate skipped: ${name} (${path.relative(__dirname, fullPath)})`);
+                    console.warn(`Duplicate skipped: ${name} (${path.relative(__dirname, fullPath)})`);
                 }
             } else {
-                console.warn(`❌ Skipping invalid command file: ${path.relative(__dirname, fullPath)}`);
+                console.warn(`Skipping invalid command file: ${path.relative(__dirname, fullPath)}`);
             }
         } catch (err) {
-            console.error(`💥 Error loading ${path.relative(__dirname, fullPath)}:`, err);
+            console.error(`Error loading ${path.relative(__dirname, fullPath)}:`, err);
         }
     }
 }
