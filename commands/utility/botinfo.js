@@ -3,6 +3,23 @@ const fs = require('fs');
 const path = require('path');
 const { getColor } = require('../../misc/colorUtil');
 
+function formatUptime(seconds) {
+  const days = Math.floor(seconds / 86400);
+  seconds %= 86400;
+  const hours = Math.floor(seconds / 3600);
+  seconds %= 3600;
+  const minutes = Math.floor(seconds / 60);
+  seconds %= 60;
+
+  let parts = [];
+  if (days > 0) parts.push(`${days}d`);
+  if (hours > 0) parts.push(`${hours}h`);
+  if (minutes > 0) parts.push(`${minutes}m`);
+  parts.push(`${seconds}s`);
+
+  return parts.join(' ');
+}
+
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('botinfo')
@@ -20,11 +37,9 @@ module.exports = {
       const rawData = fs.readFileSync(filePath, 'utf-8');
       const info = JSON.parse(rawData);
 
-      const uptimeSeconds = process.uptime();
-      const hours = Math.floor(uptimeSeconds / 3600);
-      const minutes = Math.floor((uptimeSeconds % 3600) / 60);
-      const seconds = Math.floor(uptimeSeconds % 60);
-      const uptimeStr = `${hours}h ${minutes}m ${seconds}s`;
+      const uptimeMillis = Date.now() - interaction.client.startTime;
+      const uptimeSeconds = Math.floor(uptimeMillis / 1000);
+      const uptimeStr = formatUptime(uptimeSeconds);
 
       const commandsCount = interaction.client.commands ? interaction.client.commands.size : 0;
 
