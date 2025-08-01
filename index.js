@@ -19,33 +19,36 @@ client.commands = new Collection();
 function loadCommands(dir = path.join(__dirname, 'commands')) {
     if (!fs.existsSync(dir)) return;
 
-    const files = fs.readdirSync(dir, { withFileTypes: true });
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
 
-    for (const file of files) {
-        const fullPath = path.join(dir, file.name);
+    for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
 
-        if (file.isDirectory()) {
+        if (entry.isDirectory()) {
+            // Recurse into subfolders
             loadCommands(fullPath);
             continue;
         }
 
-        // Ensure it's a regular file AND ends with .js
-        if (!file.isFile() || path.extname(file.name) !== '.js') continue;
+        if (!entry.isFile() || path.extname(entry.name) !== '.js') continue;
 
         try {
             const command = require(fullPath);
+
             if (command.data && command.run) {
-                if (!client.commands.has(command.data.name)) {
-                    client.commands.set(command.data.name, command);
-                    console.log(`Loaded: ${command.data.name}`);
+                const name = command.data.name.toLowerCase();
+
+                if (!client.commands.has(name)) {
+                    client.commands.set(name, command);
+                    console.log(`Loaded: ${name}`);
                 } else {
-                    console.warn(`Skipping duplicate command: ${command.data.name}`);
+                    console.warn(`Duplicate skipped: ${name} (${path.relative(__dirname, fullPath)})`);
                 }
             } else {
-                console.warn(`Skipping file (missing data or run): ${fullPath}`);
+                console.warn(`Skipping invalid command file: ${path.relative(__dirname, fullPath)}`);
             }
         } catch (err) {
-            console.error(`Error loading command at ${fullPath}:`, err);
+            console.error(`Error loading command at ${path.relative(__dirname, fullPath)}:`, err);
         }
     }
 }
