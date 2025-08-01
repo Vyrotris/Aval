@@ -1,5 +1,4 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const fetch = require('node-fetch');
 
 const VIRUSTOTAL_API_KEY = process.env.VIRUSTOTAL_API_KEY;
 const VIRUSTOTAL_API_URL = 'https://www.virustotal.com/api/v3/files';
