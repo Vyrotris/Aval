@@ -6,7 +6,7 @@ const path = require('path');
 const dbDir = path.join(__dirname, '..', 'data');
 if (!fs.existsSync(dbDir)) {
     fs.mkdirSync(dbDir, { recursive: true });
-}
+} 
 
 const dbPath = path.join(dbDir, 'authorized.db');
 const db = new sqlite3.Database(dbPath, err => {
