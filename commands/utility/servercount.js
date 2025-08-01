@@ -27,7 +27,7 @@ const db = new sqlite3.Database(dbPath, err => {
     }
 });
 
-const clientId = process.env.AUTH_CLIENT_ID;
+const clientId = process.env.CLIENT_ID;
 const redirectUri = encodeURIComponent('https://avalauth.vyrotris.com/callback');
 
 module.exports = {
