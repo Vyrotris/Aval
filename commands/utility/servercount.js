@@ -19,7 +19,9 @@ db.run(`CREATE TABLE IF NOT EXISTS users (
 module.exports = {
   data: new SlashCommandBuilder()
     .setName('servercount')
-    .setDescription('Check how many servers you are in'),
+    .setDescription('Check how many servers you are in')
+    .setIntegrationTypes([1])
+    .setContexts([1, 2]),
 
   async run(interaction) {
     const userId = interaction.user.id;
