@@ -4,17 +4,19 @@ const path = require('path');
 const fs = require('fs');
 const os = require('os');
 const axios = require('axios');
+const FormData = require('form-data');
 
 const ytdlp = new YtDlp();
 
-async function uploadToTransferSh(filePath) {
+async function uploadTo0x0st(filePath) {
     const fileName = path.basename(filePath);
     const fileStream = fs.createReadStream(filePath);
 
-    const res = await axios.put(`https://transfer.sh/${fileName}`, fileStream, {
-        headers: {
-            'Content-Type': 'application/octet-stream'
-        },
+    const form = new FormData();
+    form.append('file', fileStream, fileName);
+
+    const res = await axios.post('https://0x0.st', form, {
+        headers: form.getHeaders(),
         maxContentLength: Infinity,
         maxBodyLength: Infinity
     });
@@ -25,7 +27,7 @@ async function uploadToTransferSh(filePath) {
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('ytdl')
-        .setDescription('Download a YouTube video and upload to transfer.sh')
+        .setDescription('Download a YouTube video and upload to 0x0.st')
         .addStringOption(option =>
             option.setName('url')
                 .setDescription('The YouTube video URL')
@@ -48,10 +50,10 @@ module.exports = {
                 },
             });
 
-            await interaction.editReply('📤 Uploading to transfer.sh...');
-            const link = await uploadToTransferSh(outputPath);
+            await interaction.editReply('📤 Uploading to 0x0.st...');
+            const link = await uploadTo0x0st(outputPath);
 
-            await interaction.editReply(`✅ Uploaded to transfer.sh: ${link}`);
+            await interaction.editReply(`✅ Uploaded to 0x0.st: ${link}`);
 
             try {
                 fs.unlinkSync(outputPath);
