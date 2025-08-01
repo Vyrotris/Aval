@@ -19,8 +19,8 @@ module.exports = {
     try {
       const row = await getUserGuildCount(userId);
 
-      if (row && (Date.now() - row.last_updated < 60 * 2000)) {
-          return interaction.reply({ content: `You are in **${row.guild_count}** servers.`, ephemeral: true });
+      if (row && (Date.now() - row.last_updated < 60 * 5000)) {
+          return interaction.reply({ content: `You are in **${row.guild_count}** servers.`, ephemeral: false });
       }
 
       const oauthUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=identify%20guilds&state=${userId}`;
