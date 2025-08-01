@@ -42,7 +42,7 @@ module.exports = {
         await interaction.deferReply();
 
         try {
-            const avalTempDir = path.join(__dirname, 'aval_temp');
+            const avalTempDir = path.join(__dirname, '..', '..', 'aval_temp');
 
             if (!fs.existsSync(avalTempDir)) {
                 fs.mkdirSync(avalTempDir, { recursive: true });
@@ -52,6 +52,7 @@ module.exports = {
 
             await ytdlp.downloadAsync(url, {
                 output: outputPath,
+                format: 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4',
                 onProgress: (progress) => {
                     console.log(progress);
                 },
