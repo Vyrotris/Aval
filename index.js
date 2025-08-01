@@ -29,25 +29,23 @@ function loadCommands(dir = path.join(__dirname, 'commands')) {
             continue;
         }
 
+        // Ensure it's a regular file AND ends with .js
         if (!file.isFile() || path.extname(file.name) !== '.js') continue;
 
         try {
             const command = require(fullPath);
-
             if (command.data && command.run) {
-                const name = command.data.name.toLowerCase();
-
-                if (!client.commands.has(name)) {
-                    client.commands.set(name, command);
-                    console.log(`✅ Loaded: ${name} (${path.relative(__dirname, fullPath)})`);
+                if (!client.commands.has(command.data.name)) {
+                    client.commands.set(command.data.name, command);
+                    console.log(`Loaded: ${command.data.name}`);
                 } else {
-                    console.warn(`⚠️ Duplicate skipped: ${name} (${path.relative(__dirname, fullPath)})`);
+                    console.warn(`Skipping duplicate command: ${command.data.name}`);
                 }
             } else {
-                console.warn(`❌ Skipping invalid command file: ${path.relative(__dirname, fullPath)}`);
+                console.warn(`Skipping file (missing data or run): ${fullPath}`);
             }
         } catch (err) {
-            console.error(`💥 Error loading ${path.relative(__dirname, fullPath)}:`, err);
+            console.error(`Error loading command at ${fullPath}:`, err);
         }
     }
 }
