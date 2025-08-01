@@ -33,15 +33,18 @@ function loadCommands(dir = path.join(__dirname, 'commands')) {
 
         try {
             const command = require(fullPath);
+
             if (command.data && command.run) {
-                if (!client.commands.has(command.data.name)) {
-                    client.commands.set(command.data.name, command);
-                    console.log(`Loaded: ${command.data.name}`);
+                const name = command.data.name.toLowerCase();
+
+                if (!client.commands.has(name)) {
+                    client.commands.set(name, command);
+                    console.log(`Loaded: ${name}`);
                 } else {
-                    console.warn(`Skipping duplicate command: ${command.data.name}`);
+                    console.warn(`Duplicate skipped: ${name} (${fullPath})`);
                 }
             } else {
-                console.warn(`Skipping file (missing data or run): ${fullPath}`);
+                console.warn(`Skipping invalid command file: ${fullPath}`);
             }
         } catch (err) {
             console.error(`Error loading command at ${fullPath}:`, err);
