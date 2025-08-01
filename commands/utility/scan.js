@@ -28,8 +28,8 @@ module.exports = {
       const response = await fetch(file.url);
       if (!response.ok) throw new Error('Failed to download file');
 
-      const buffer = await response.buffer();
-
+      const arrayBuffer = await response.arrayBuffer();
+      const buffer = Buffer.from(arrayBuffer);
       const vtResponse = await fetch(VIRUSTOTAL_API_URL, {
         method: 'POST',
         headers: {
