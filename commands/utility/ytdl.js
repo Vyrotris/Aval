@@ -59,7 +59,7 @@ module.exports = {
             });
 
             const link = await uploadToCatbox(outputPath);
-            await interaction.editReply(`✅ Uploaded: ${link}`);
+            await interaction.editReply(link);
 
             try {
                 fs.unlinkSync(outputPath);
