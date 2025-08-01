@@ -21,6 +21,7 @@
     "google-translate-api-x": "^10.7.2",
     "node-fetch": "^3.3.2",
     "openai": "^5.10.2",
-    "sqlite3": "^5.1.7"
+    "sqlite3": "^5.1.7",
+    "ytdl-core": "^4.11.5"
   }
 }
