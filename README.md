@@ -17,7 +17,7 @@ cd Aval
 ```bash
 npm install
 ```
-3. Configure environment variables\ncreate a `.env` file in the project root:
+3. Configure environment variables by ceating a `.env` file in the project root:
 ```env
 TOKEN=your_discord_bot_token
 CLIENT_ID=your_client_id
