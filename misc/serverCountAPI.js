@@ -1,12 +1,12 @@
 const express = require('express');
-const fetch = require('node-fetch');
 const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 const app = express();
 
-const clientId = 'YOUR_CLIENT_ID';
-const clientSecret = 'YOUR_CLIENT_SECRET';
+require('dotenv').config();
+const clientId = process.env.AUTH_CLIENT_ID;
+const clientSecret = process.env.AUTH_CLIENT_SECRET;
 const redirectUri = 'https://avalauth.vyrotris.com/callback';
 
 const dbPath = path.join(__dirname, '..', 'data', 'authorized.db');
