@@ -11,7 +11,7 @@ function formatUptime(seconds) {
   const minutes = Math.floor(seconds / 60);
   seconds %= 60;
 
-  let parts = [];
+  const parts = [];
   if (days > 0) parts.push(`${days}d`);
   if (hours > 0) parts.push(`${hours}h`);
   if (minutes > 0) parts.push(`${minutes}m`);
@@ -41,7 +41,7 @@ module.exports = {
       const uptimeSeconds = Math.floor(uptimeMillis / 1000);
       const uptimeStr = formatUptime(uptimeSeconds);
 
-      const commandsCount = interaction.client.commands ? interaction.client.commands.size : 0;
+      const commandsCount = interaction.client.commands?.size ?? 0;
 
       let developersStr = '';
       if (Array.isArray(info.developers)) {
