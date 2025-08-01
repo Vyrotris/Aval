@@ -37,7 +37,7 @@ app.get('/callback', async (req, res) => {
 
         const guilds = await guildsResponse.json();
         const guildCount = Array.isArray(guilds) ? guilds.length : 0;
-        await setUserGuildCount(userId, tokenData.access_token, guildCount);
+        await setUserGuildCount(userId, guildCount);
 
         res.send(`Saved! You are in **${guildCount}** servers. You can now return to Discord and run /servercount again.`);
 
