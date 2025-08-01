@@ -15,7 +15,6 @@ const client = new Client({
 });
 
 client.commands = new Collection();
-client.startTime = Date.now();
 
 function loadCommands(dir = path.join(__dirname, 'commands')) {
     if (!fs.existsSync(dir)) return;
@@ -71,6 +70,7 @@ async function deployCommands() {
 loadCommands();
 
 client.once('ready', async () => {
+    client.startTime = Date.now();
     console.log(`Logged in as ${client.user.tag}`);
     await deployCommands();
 });
