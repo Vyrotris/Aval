@@ -12,7 +12,9 @@ module.exports = {
       option.setName('file')
         .setDescription('File to scan')
         .setRequired(true)
-    ),
+    )
+    .setIntegrationTypes([1])
+    .setContexts([1, 2]),
 
   async run(interaction) {
     const file = interaction.options.getAttachment('file');
