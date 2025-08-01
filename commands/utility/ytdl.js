@@ -42,7 +42,13 @@ module.exports = {
         await interaction.deferReply();
 
         try {
-            const outputPath = path.join(os.tmpdir(), `ytdl-${Date.now()}.mp4`);
+            const avalTempDir = path.join(__dirname, 'aval_temp');
+
+            if (!fs.existsSync(avalTempDir)) {
+                fs.mkdirSync(avalTempDir, { recursive: true });
+            }
+
+            const outputPath = path.join(avalTempDir, `ytdl-${Date.now()}.mp4`);
 
             await ytdlp.downloadAsync(url, {
                 output: outputPath,
