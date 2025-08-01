@@ -15,6 +15,7 @@ const client = new Client({
 });
 
 client.commands = new Collection();
+client.startTime = Date.now();
 
 function loadCommands(dir = path.join(__dirname, 'commands')) {
     if (!fs.existsSync(dir)) return;
