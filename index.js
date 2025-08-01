@@ -70,7 +70,6 @@ async function deployCommands() {
 loadCommands();
 
 client.once('ready', async () => {
-    client.startTime = Date.now();
     console.log(`Logged in as ${client.user.tag}`);
     await deployCommands();
 });
