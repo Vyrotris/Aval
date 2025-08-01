@@ -3,13 +3,27 @@ const { YtDlp } = require('ytdlp-nodejs');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
+const FormData = require('form-data');
+const axios = require('axios');
 
 const ytdlp = new YtDlp();
+
+async function uploadToCatbox(filePath) {
+    const form = new FormData();
+    form.append('reqtype', 'fileupload');
+    form.append('fileToUpload', fs.createReadStream(filePath));
+
+    const res = await axios.post('https://catbox.moe/user/api.php', form, {
+        headers: form.getHeaders()
+    });
+
+    return res.data;
+}
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('ytdl')
-        .setDescription('Download a YouTube video')
+        .setDescription('Download a YouTube video and upload to Catbox.moe')
         .addStringOption(option =>
             option.setName('url')
                 .setDescription('The YouTube video URL')
@@ -32,10 +46,10 @@ module.exports = {
                 },
             });
 
-            await interaction.editReply({
-                content: 'Download complete!',
-                files: [outputPath]
-            });
+            await interaction.editReply('Downloading...');
+            const link = await uploadToCatbox(outputPath);
+
+            await interaction.editReply(`Downloaded: ${link}`);
 
             try {
                 fs.unlinkSync(outputPath);
@@ -45,7 +59,7 @@ module.exports = {
 
         } catch (error) {
             console.error(error);
-            await interaction.editReply('Failed to download video.');
+            await interaction.editReply('❌ Failed to download or upload video.');
         }
     }
 };

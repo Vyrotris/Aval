@@ -19,6 +19,7 @@
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
     "figlet": "^1.8.2",
+    "form-data": "^4.0.4",
     "fs": "^0.0.1-security",
     "google-translate-api-x": "^10.7.2",
     "https": "^1.0.0",
