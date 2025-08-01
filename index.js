@@ -18,23 +18,33 @@ client.commands = new Collection();
 
 function loadCommands(dir = path.join(__dirname, 'commands')) {
     if (!fs.existsSync(dir)) return;
+
     const files = fs.readdirSync(dir, { withFileTypes: true });
+
     for (const file of files) {
         const fullPath = path.join(dir, file.name);
+
         if (file.isDirectory()) {
             loadCommands(fullPath);
-        } else if (file.isFile() && file.name.endsWith('.js')) {
-            try {
-                const command = require(fullPath);
-                if (command.data && command.run) {
+            continue;
+        }
+
+        if (!file.isFile() || path.extname(file.name) !== '.js') continue;
+
+        try {
+            const command = require(fullPath);
+            if (command.data && command.run) {
+                if (!client.commands.has(command.data.name)) {
                     client.commands.set(command.data.name, command);
                     console.log(`Loaded: ${command.data.name}`);
                 } else {
-                    console.warn(`Skipping file (missing data or run): ${fullPath}`);
+                    console.warn(`Skipping duplicate command: ${command.data.name}`);
                 }
-            } catch (err) {
-                console.error(`Error loading command at ${fullPath}:`, err);
+            } else {
+                console.warn(`Skipping file (missing data or run): ${fullPath}`);
             }
+        } catch (err) {
+            console.error(`Error loading command at ${fullPath}:`, err);
         }
     }
 }
