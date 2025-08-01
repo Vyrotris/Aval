@@ -1,4 +1,6 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const fetch = require('node-fetch');
+const FormData = require('form-data');
 
 const VIRUSTOTAL_API_KEY = process.env.VIRUSTOTAL_API_KEY;
 const VIRUSTOTAL_API_URL = 'https://www.virustotal.com/api/v3/files';
@@ -30,13 +32,17 @@ module.exports = {
 
       const arrayBuffer = await response.arrayBuffer();
       const buffer = Buffer.from(arrayBuffer);
+
+      const form = new FormData();
+      form.append('file', buffer, { filename: file.name, contentType: file.contentType });
+
       const vtResponse = await fetch(VIRUSTOTAL_API_URL, {
         method: 'POST',
         headers: {
           'x-apikey': VIRUSTOTAL_API_KEY,
-          'Content-Type': 'application/octet-stream',
+          ...form.getHeaders()
         },
-        body: buffer,
+        body: form,
       });
 
       if (!vtResponse.ok) {
