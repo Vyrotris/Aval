@@ -37,7 +37,7 @@ module.exports = {
           { name: 'Version', value: info.version || 'N/A', inline: true },
           { name: 'Developers', value: developersStr, inline: true },
           { name: 'Commands', value: commandsCount.toString(), inline: true },
-          { name: 'GitHub2', value: info.github ? `[Link](${info.github})` : 'N/A', inline: true }
+          { name: 'GitHub', value: info.github ? `[Link](${info.github})` : 'N/A', inline: true }
         )
         .setTimestamp()
         .setFooter({ text: `Requested by ${interaction.user.username}` });
