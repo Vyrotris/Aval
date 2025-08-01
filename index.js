@@ -22,27 +22,16 @@ function loadCommands(dir = path.join(__dirname, 'commands')) {
     const files = fs.readdirSync(dir, { withFileTypes: true });
 
     for (const file of files) {
-        const fullPath = path.join(dir, file.name);
-
-        if (file.isDirectory()) {
-            loadCommands(fullPath);
-            continue;
-        }
-
         if (!file.isFile() || path.extname(file.name) !== '.js') continue;
 
+        const fullPath = path.join(dir, file.name);
         try {
             const command = require(fullPath);
 
             if (command.data && command.run) {
                 const name = command.data.name.toLowerCase();
-
-                if (!client.commands.has(name)) {
-                    client.commands.set(name, command);
-                    console.log(`Loaded: ${name}`);
-                } else {
-                    console.warn(`Duplicate skipped: ${name} (${fullPath})`);
-                }
+                client.commands.set(name, command);
+                console.log(`Loaded: ${name}`);
             } else {
                 console.warn(`Skipping invalid command file: ${fullPath}`);
             }
