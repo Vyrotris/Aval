@@ -59,7 +59,6 @@ loadCommands();
 client.once('ready', async () => {
     console.log(`Logged in as ${client.user.tag}`);
     await deployCommands();
-    // Removed python process launch here
 });
 
 client.on('interactionCreate', async interaction => {
