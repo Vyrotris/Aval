@@ -3,27 +3,29 @@ const { YtDlp } = require('ytdlp-nodejs');
 const path = require('path');
 const fs = require('fs');
 const os = require('os');
-const FormData = require('form-data');
 const axios = require('axios');
 
 const ytdlp = new YtDlp();
 
-async function uploadToCatbox(filePath) {
-    const form = new FormData();
-    form.append('reqtype', 'fileupload');
-    form.append('fileToUpload', fs.createReadStream(filePath));
+async function uploadToTransferSh(filePath) {
+    const fileName = path.basename(filePath);
+    const fileStream = fs.createReadStream(filePath);
 
-    const res = await axios.post('https://catbox.moe/user/api.php', form, {
-        headers: form.getHeaders()
+    const res = await axios.put(`https://transfer.sh/${fileName}`, fileStream, {
+        headers: {
+            'Content-Type': 'application/octet-stream'
+        },
+        maxContentLength: Infinity,
+        maxBodyLength: Infinity
     });
 
-    return res.data;
+    return res.data.trim();
 }
 
 module.exports = {
     data: new SlashCommandBuilder()
         .setName('ytdl')
-        .setDescription('Download a YouTube video and upload to Catbox.moe')
+        .setDescription('Download a YouTube video and upload to transfer.sh')
         .addStringOption(option =>
             option.setName('url')
                 .setDescription('The YouTube video URL')
@@ -46,10 +48,10 @@ module.exports = {
                 },
             });
 
-            await interaction.editReply('Downloading...');
-            const link = await uploadToCatbox(outputPath);
+            await interaction.editReply('📤 Uploading to transfer.sh...');
+            const link = await uploadToTransferSh(outputPath);
 
-            await interaction.editReply(`Downloaded: ${link}`);
+            await interaction.editReply(`✅ Uploaded to transfer.sh: ${link}`);
 
             try {
                 fs.unlinkSync(outputPath);
