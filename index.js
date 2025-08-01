@@ -19,24 +19,35 @@ client.commands = new Collection();
 function loadCommands(dir = path.join(__dirname, 'commands')) {
     if (!fs.existsSync(dir)) return;
 
-    const files = fs.readdirSync(dir, { withFileTypes: true });
+    const entries = fs.readdirSync(dir, { withFileTypes: true });
 
-    for (const file of files) {
-        if (!file.isFile() || path.extname(file.name) !== '.js') continue;
+    for (const entry of entries) {
+        const fullPath = path.join(dir, entry.name);
 
-        const fullPath = path.join(dir, file.name);
+        if (entry.isDirectory()) {
+            loadCommands(fullPath);
+            continue;
+        }
+
+        if (!entry.isFile() || path.extname(entry.name) !== '.js') continue;
+
         try {
             const command = require(fullPath);
 
             if (command.data && command.run) {
                 const name = command.data.name.toLowerCase();
-                client.commands.set(name, command);
-                console.log(`Loaded: ${name}`);
+
+                if (!client.commands.has(name)) {
+                    client.commands.set(name, command);
+                    console.log(`Loaded: ${name}`);
+                } else {
+                    console.warn(`Duplicate skipped: ${name} (${path.relative(__dirname, fullPath)})`);
+                }
             } else {
-                console.warn(`Skipping invalid command file: ${fullPath}`);
+                console.warn(`Skipping invalid command file: ${path.relative(__dirname, fullPath)}`);
             }
         } catch (err) {
-            console.error(`Error loading command at ${fullPath}:`, err);
+            console.error(`Error loading command at ${path.relative(__dirname, fullPath)}:`, err);
         }
     }
 }
