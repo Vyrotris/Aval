@@ -24,6 +24,15 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
+setInterval(() => {
+  const tenMinutesAgo = Date.now() - (10 * 60 * 1000);
+  db.run(`DELETE FROM users WHERE last_updated < ?`, [tenMinutesAgo], (err) => {
+    if (err) {
+      console.error('Failed to cleanup old user data:', err);
+    }
+  });
+}, 5 * 60 * 1000);
+
 function getUserGuildCount(userId) {
   return new Promise((resolve, reject) => {
     db.get('SELECT guild_count, last_updated FROM users WHERE id = ?', [userId], (err, row) => {
