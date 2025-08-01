@@ -23,6 +23,7 @@ TOKEN=your_discord_bot_token
 CLIENT_ID=your_client_id
 ADMINS=comma_separated_admin_ids
 OPENAI_API_KEY=your_openai_api_key
+AUTH_CLIENT_SECRET=your_auth_client_secret
 ```
 4. Run the bot
 ```bash
