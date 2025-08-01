@@ -5,7 +5,7 @@ const path = require('path');
 const app = express();
 
 require('dotenv').config();
-const clientId = process.env.AUTH_CLIENT_ID;
+const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.AUTH_CLIENT_SECRET;
 const redirectUri = 'https://avalauth.vyrotris.com/callback';
 
