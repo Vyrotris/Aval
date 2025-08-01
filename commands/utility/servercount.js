@@ -32,7 +32,7 @@ const redirectUri = encodeURIComponent('https://avalauth.vyrotris.com/callback')
 
 module.exports = {
     data: new SlashCommandBuilder()
-        .setName('guildcount')
+        .setName('servercount')
         .setDescription('Check how many servers you are in')
         .setIntegrationTypes([1])
         .setContexts([1, 2]),
