@@ -1,5 +1,4 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
-const fetch = require('node-fetch');
 const FormData = require('form-data');
 
 const VIRUSTOTAL_API_KEY = process.env.VIRUSTOTAL_API_KEY;
