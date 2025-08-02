@@ -24,6 +24,7 @@ CLIENT_ID=your_client_id
 ADMINS=comma_separated_admin_ids
 OPENAI_API_KEY=your_openai_api_key
 AUTH_CLIENT_SECRET=your_auth_client_secret
+REDIRECT_URI=your_redirect_uri
 ```
 4. Run the bot
 ```bash
