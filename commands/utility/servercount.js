@@ -4,7 +4,7 @@ const path = require('path');
 const { getUserGuildCount } = require('../../misc/guildCountDB');
 
 const clientId = process.env.CLIENT_ID;
-const redirectUri = encodeURIComponent('https://avalauth.vyrotris.com/callback');
+const redirectUri = encodeURIComponent(process.env.REDIRECT_URI);
 
 module.exports = {
   data: new SlashCommandBuilder()
