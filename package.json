@@ -30,6 +30,7 @@
     "openai": "^5.10.2",
     "os": "^0.1.2",
     "path": "^0.12.7",
+    "piston-client": "^1.0.2",
     "sqlite3": "^5.1.7",
     "ytdlp-nodejs": "^2.3.4"
   }
