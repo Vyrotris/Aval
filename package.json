@@ -24,6 +24,7 @@
     "fs": "^0.0.1-security",
     "google-translate-api-x": "^10.7.2",
     "https": "^1.0.0",
+    "mathjs": "^14.6.0",
     "namemcwrapper": "^2.4.2",
     "node-fetch": "^3.3.2",
     "openai": "^5.10.2",
