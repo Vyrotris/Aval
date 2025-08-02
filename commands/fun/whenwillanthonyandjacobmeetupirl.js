@@ -22,7 +22,7 @@ module.exports = {
                 const embed = new EmbedBuilder()
                     .setTitle('🎉 Anthony and Jacob Meetup')
                     .setDescription('Anthony and Jacob have already met up in real life! Hope it was awesome!')
-                    .setColor('#00ff88')
+                    .setColor(getColor(info))
                     .setTimestamp();
                 
                 await interaction.reply({ embeds: [embed] });
@@ -47,7 +47,7 @@ module.exports = {
                     { name: '📅 Meetup Date', value: 'August 15, 2025 (EST)', inline: true },
                     { name: '⏳ Time Remaining', value: countdownText, inline: true }
                 )
-                .setColor('#ff6b6b')
+                .setColor(getColor(info))
                 .setTimestamp();
             
             await interaction.reply({ embeds: [embed] });
@@ -62,7 +62,7 @@ module.exports = {
                 const embed = new EmbedBuilder()
                     .setTitle('🎉 Anthony and Jacob Meetup')
                     .setDescription('Anthony and Jacob have already met up in real life! Hope it was awesome!')
-                    .setColor('#00ff88')
+                    .setColor(getColor(info))
                     .setTimestamp();
                 
                 await interaction.reply({ embeds: [embed] });
