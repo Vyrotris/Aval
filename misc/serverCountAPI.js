@@ -6,7 +6,7 @@ const app = express();
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.AUTH_CLIENT_SECRET;
-const redirectUri = 'https://avalauth.vyrotris.com/callback';
+const redirectUri = process.env.REDIRECT_URI;
 
 app.get('/callback', async (req, res) => {
     const code = req.query.code;
