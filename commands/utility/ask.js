@@ -18,10 +18,6 @@ module.exports = {
         .setContexts([1, 2]),
 
     async run(interaction) {
-        const allowedIDs = process.env.ADMINS ? process.env.ADMINS.split(',') : [];
-        if (!allowedIDs.includes(interaction.user.id)) {
-            return interaction.reply({ content: 'You are not authorized to use this command.', ephemeral: true });
-        }
         try {
             await interaction.deferReply();
 
