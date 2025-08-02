@@ -8,6 +8,17 @@ if (!fs.existsSync(dbDir)) {
 }
 
 const dbPath = path.join(dbDir, 'authorized.db');
+
+// Delete the DB file on startup if it exists
+if (fs.existsSync(dbPath)) {
+  try {
+    fs.unlinkSync(dbPath);
+    console.log('Deleted existing database file on startup.');
+  } catch (err) {
+    console.error('Failed to delete database file:', err);
+  }
+}
+
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('Failed to open DB:', err);
