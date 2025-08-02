@@ -27,6 +27,7 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
+// Optional cleanup: remove tokens for very old data if you want
 setInterval(() => {
   const oneMonthAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
   db.run(`DELETE FROM users WHERE last_updated < ?`, [oneMonthAgo], (err) => {
@@ -34,8 +35,11 @@ setInterval(() => {
       console.error('Failed to cleanup old user data:', err);
     }
   });
-}, 6 * 60 * 60 * 1000);
+}, 6 * 60 * 60 * 1000); // every 6 hours
 
+/**
+ * Get guild count and token data for a user
+ */
 function getUserGuildCount(userId) {
   return new Promise((resolve, reject) => {
     db.get(
@@ -49,12 +53,11 @@ function getUserGuildCount(userId) {
   });
 }
 
+/**
+ * Save guild count and token info when user first authorizes
+ */
 function setUserGuildCount(userId, guildCount, tokenData = {}) {
   return new Promise((resolve, reject) => {
-    let expiresAt = tokenData.expires_at || null;
-    if (expiresAt) {
-      expiresAt = expiresAt - 30000; // 30s buffer
-    }
     db.run(
       `INSERT OR REPLACE INTO users (id, guild_count, last_updated, access_token, refresh_token, expires_at)
        VALUES (?, ?, ?, ?, ?, ?)`,
@@ -64,7 +67,7 @@ function setUserGuildCount(userId, guildCount, tokenData = {}) {
         Date.now(),
         tokenData.access_token || null,
         tokenData.refresh_token || null,
-        expiresAt
+        tokenData.expires_at || null
       ],
       (err) => {
         if (err) return reject(err);
@@ -74,12 +77,11 @@ function setUserGuildCount(userId, guildCount, tokenData = {}) {
   });
 }
 
+/**
+ * Update tokens without changing guild count
+ */
 function updateUserTokens(userId, tokenData) {
   return new Promise((resolve, reject) => {
-    let expiresAt = tokenData.expires_at || null;
-    if (expiresAt) {
-      expiresAt = expiresAt - 30000;
-    }
     db.run(
       `UPDATE users
        SET access_token = ?, refresh_token = ?, expires_at = ?, last_updated = ?
@@ -87,7 +89,7 @@ function updateUserTokens(userId, tokenData) {
       [
         tokenData.access_token || null,
         tokenData.refresh_token || null,
-        expiresAt,
+        tokenData.expires_at || null,
         Date.now(),
         userId
       ],

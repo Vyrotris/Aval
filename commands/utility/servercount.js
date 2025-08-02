@@ -39,8 +39,7 @@ module.exports = {
         }
 
         let accessToken = row.access_token;
-
-        if (Date.now() > row.expires_at - 30000) {
+        if (Date.now() > row.expires_at) {
             const tokenData = await refreshAccessToken(row.refresh_token);
             if (!tokenData.access_token) {
                 const redirectUri = encodeURIComponent(process.env.REDIRECT_URI);
@@ -54,7 +53,7 @@ module.exports = {
             await updateUserTokens(userId, {
                 access_token: tokenData.access_token,
                 refresh_token: tokenData.refresh_token,
-                expires_at: Date.now() + (tokenData.expires_in - 30) * 1000
+                expires_at: Date.now() + tokenData.expires_in * 1000
             });
         }
 
