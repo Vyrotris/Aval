@@ -32,6 +32,7 @@
     "path": "^0.12.7",
     "piston-client": "^1.0.2",
     "sqlite3": "^5.1.7",
+    "yahoo-finance2": "^2.13.3",
     "ytdlp-nodejs": "^2.3.4"
   }
 }
