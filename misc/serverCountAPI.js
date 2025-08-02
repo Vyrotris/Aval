@@ -5,16 +5,16 @@ const { setUserGuildCount } = require('./guildCountDB');
 
 const app = express();
 
-app.get('/', (req, res) => {
-  res.redirect('/callback');
-});
-
 app.set('views', path.join(__dirname));
 app.set('view engine', 'ejs');
 
 const clientId = process.env.CLIENT_ID;
 const clientSecret = process.env.AUTH_CLIENT_SECRET;
 const redirectUri = process.env.REDIRECT_URI;
+
+app.get('/', (req, res) => {
+  res.redirect('/callback');
+});
 
 app.get('/callback', async (req, res) => {
   const code = req.query.code;
@@ -66,7 +66,7 @@ app.get('/callback', async (req, res) => {
     await setUserGuildCount(userId, guildCount, {
       access_token: tokenData.access_token,
       refresh_token: tokenData.refresh_token,
-      expires_at: Date.now() + tokenData.expires_in * 1000,
+      expires_at: Date.now() + (tokenData.expires_in - 30) * 1000,
     });
 
     res.render('response', {
