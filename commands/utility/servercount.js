@@ -63,6 +63,15 @@ module.exports = {
         const guilds = await guildsResponse.json();
         const guildCount = Array.isArray(guilds) ? guilds.length : 0;
 
+        if (guildCount === 0) {
+            const redirectUri = encodeURIComponent(process.env.REDIRECT_URI);
+            const oauthUrl = `https://discord.com/oauth2/authorize?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=code&scope=identify%20guilds&state=${userId}`;
+            return interaction.reply({
+                content: `Please click [here to re-authorize](${oauthUrl}).`,
+                ephemeral: true
+            });
+        }
+
         return interaction.reply({
             content: `You are in **${guildCount}** servers.`,
             ephemeral: false
