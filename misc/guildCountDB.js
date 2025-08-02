@@ -8,6 +8,16 @@ if (!fs.existsSync(dbDir)) {
 }
 
 const dbPath = path.join(dbDir, 'authorized.db');
+
+if (fs.existsSync(dbPath)) {
+  try {
+    fs.unlinkSync(dbPath);
+    console.log('Deleted old database file to start fresh.');
+  } catch (err) {
+    console.error('Failed to delete old database file:', err);
+  }
+}
+
 const db = new sqlite3.Database(dbPath, (err) => {
   if (err) {
     console.error('Failed to open DB:', err);
@@ -27,7 +37,6 @@ const db = new sqlite3.Database(dbPath, (err) => {
   }
 });
 
-// Optional cleanup: remove tokens for very old data if you want
 setInterval(() => {
   const oneMonthAgo = Date.now() - (30 * 24 * 60 * 60 * 1000);
   db.run(`DELETE FROM users WHERE last_updated < ?`, [oneMonthAgo], (err) => {
@@ -35,11 +44,8 @@ setInterval(() => {
       console.error('Failed to cleanup old user data:', err);
     }
   });
-}, 6 * 60 * 60 * 1000); // every 6 hours
+}, 6 * 60 * 60 * 1000);
 
-/**
- * Get guild count and token data for a user
- */
 function getUserGuildCount(userId) {
   return new Promise((resolve, reject) => {
     db.get(
@@ -53,9 +59,6 @@ function getUserGuildCount(userId) {
   });
 }
 
-/**
- * Save guild count and token info when user first authorizes
- */
 function setUserGuildCount(userId, guildCount, tokenData = {}) {
   return new Promise((resolve, reject) => {
     db.run(
@@ -77,9 +80,6 @@ function setUserGuildCount(userId, guildCount, tokenData = {}) {
   });
 }
 
-/**
- * Update tokens without changing guild count
- */
 function updateUserTokens(userId, tokenData) {
   return new Promise((resolve, reject) => {
     db.run(
