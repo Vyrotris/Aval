@@ -1,4 +1,5 @@
 const { SlashCommandBuilder, EmbedBuilder } = require('discord.js');
+const { getColor } = require('../../misc/colorUtil');
 const axios = require('axios');
 
 module.exports = {
@@ -86,7 +87,7 @@ module.exports = {
                     { name: '📅 Meetup Date', value: 'August 15, 2025 (EST)', inline: true },
                     { name: '⏳ Time Remaining', value: countdownText, inline: true }
                 )
-                .setColor('#ff6b6b')
+                .setColor(getColor(info))
                 .setTimestamp();
             
             await interaction.reply({ embeds: [embed] });
