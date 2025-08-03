@@ -1,4 +1,4 @@
-const { Client, GatewayIntentBits, Collection } = require('discord.js');
+const { Client, GatewayIntentBits, Collection, ActivityType } = require('discord.js');
 const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const fs = require('fs');
@@ -73,6 +73,7 @@ loadCommands();
 
 client.once('ready', async () => {
     console.log(`Logged in as ${client.user.tag}`);
+    client.user.setActivity('vyrotris.com', { type: ActivityType.Playing });
     await deployCommands();
 });
 
