@@ -3,6 +3,7 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const fs = require('fs');
 const path = require('path');
+const { spawn } = require('child_process');
 const config = require('./data/config.json');
 const autoRole = require('./misc/autoRole');
 require('dotenv').config();
@@ -79,7 +80,14 @@ loadCommands();
 
 client.once('ready', async () => {
     console.log(`Logged in as ${client.user.tag}`);
-    require('./misc/dashboard');
+    const dashboardPath = path.join(__dirname, 'misc', 'dashboard.js');
+    const dashboard = spawn('node', [dashboardPath], {
+        stdio: 'inherit',
+        env: process.env
+    });
+    dashboard.on('close', code => {
+        console.log(`Dashboard process exited with code ${code}`);
+    });
     const activityName = config.activity.name || 'vyrotris.com';
     const activityType = ActivityType[config.activity.type] || ActivityType.Playing;
     client.user.setActivity(activityName, { type: activityType });
