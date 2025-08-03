@@ -3,6 +3,7 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const fs = require('fs');
 const path = require('path');
+const config = require('./data/config.json');
 require('dotenv').config();
 
 require('./misc/serverCountAPI');
@@ -17,6 +18,8 @@ const client = new Client({
 });
 
 client.commands = new Collection();
+
+const activityType = ActivityType[config.activity.type] || ActivityType.Playing;
 
 function loadCommands(dir = path.join(__dirname, 'commands')) {
     if (!fs.existsSync(dir)) return;
@@ -73,7 +76,9 @@ loadCommands();
 
 client.once('ready', async () => {
     console.log(`Logged in as ${client.user.tag}`);
-    client.user.setActivity('vyrotris.com', { type: ActivityType.Playing });
+    const activityName = config.activity.name || 'vyrotris.com';
+    const activityType = ActivityType[config.activity.type] || ActivityType.Playing;
+    client.user.setActivity(activityName, { type: activityType });
     await deployCommands();
 });
 
