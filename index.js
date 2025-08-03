@@ -4,6 +4,7 @@ const { Routes } = require('discord-api-types/v10');
 const fs = require('fs');
 const path = require('path');
 const config = require('./data/config.json');
+const autoRole = require('./misc/autoRole');
 require('dotenv').config();
 
 require('./misc/serverCountAPI');
@@ -12,7 +13,9 @@ const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.DirectMessages,
-        GatewayIntentBits.MessageContent
+        GatewayIntentBits.MessageContent,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildMessages
     ],
     partials: ['CHANNEL']
 });
@@ -76,9 +79,11 @@ loadCommands();
 
 client.once('ready', async () => {
     console.log(`Logged in as ${client.user.tag}`);
+    require('./misc/dashboard');
     const activityName = config.activity.name || 'vyrotris.com';
     const activityType = ActivityType[config.activity.type] || ActivityType.Playing;
     client.user.setActivity(activityName, { type: activityType });
+    autoRole(client);
     await deployCommands();
 });
 
