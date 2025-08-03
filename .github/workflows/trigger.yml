@@ -1,7 +1,6 @@
 name: Trigger private repo sync
 
-on:
-  push:
+on: [push]
 
 jobs:
   dispatch:
