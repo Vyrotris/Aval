@@ -1,4 +1,4 @@
-# Aval
+![Aval Logo](https://raw.githubusercontent.com/Vyrotris/assets/refs/heads/main/avalcircle.png) # Aval
 **Aval** is a versatile personal Discord utility bot designed to provide powerful commands, automation, and fun features for your own use.
 
 ## 📌 Features
