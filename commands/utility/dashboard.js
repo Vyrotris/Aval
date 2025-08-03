@@ -1,6 +1,9 @@
 const { SlashCommandBuilder } = require('discord.js');
 
-const dashboardRedirectUri = process.env.DASHBOARD_REDIRECT_URI;
+const originalUri = process.env.DASHBOARD_REDIRECT_URI;
+const url = new URL(originalUri);
+url.pathname = '/dashboard';
+const dashboardRedirectUri = url.toString();
 
 module.exports = {
     data: new SlashCommandBuilder()

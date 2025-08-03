@@ -4,7 +4,9 @@ require('dotenv').config();
 const session = require('express-session');
 const bodyParser = require('body-parser');
 const fs = require('fs');
+const crypto = require('crypto');
 const Database = require('better-sqlite3');
+const { Client, GatewayIntentBits } = require('discord.js');
 
 const dataDir = path.join(__dirname, '../data');
 if (!fs.existsSync(dataDir)) {
@@ -40,6 +42,12 @@ function setGuildSettings(guildId, roleId) {
   ).run(guildId, roleId || null);
 }
 
+const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+
+client.login(process.env.TOKEN).then(() => {
+  console.log('Discord client logged in');
+}).catch(console.error);
+
 const app = express();
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -47,9 +55,11 @@ app.use(bodyParser.json());
 app.set('view engine', 'ejs');
 app.set('views', __dirname);
 
+const sessionSecret = crypto.randomBytes(64).toString('hex');
+
 app.use(
   session({
-    secret: process.env.SESSION_SECRET || 'supersecret',
+    secret: sessionSecret,
     resave: false,
     saveUninitialized: false,
   })
@@ -95,11 +105,7 @@ app.get('/callback', async (req, res) => {
     });
     const guilds = await guildsResponse.json();
 
-    const botGuildsResponse = await fetch('https://discord.com/api/users/@me/guilds', {
-      headers: { Authorization: `Bot ${botToken}` },
-    });
-    const botGuilds = await botGuildsResponse.json();
-    const botGuildIds = new Set(botGuilds.map((g) => g.id));
+    const botGuildIds = new Set(client.guilds.cache.map(g => g.id));
 
     const filteredGuilds = guilds.filter((g) => {
       const hasAdmin = (g.permissions & 0x8) === 0x8;
@@ -120,16 +126,30 @@ app.get('/dashboard', async (req, res) => {
 
   const rolesMap = {};
 
-  for (const guild of req.session.guilds) {
+  for (const guildInfo of req.session.guilds) {
     try {
-      const rolesRes = await fetch(`https://discord.com/api/v10/guilds/${guild.id}/roles`, {
-        headers: { Authorization: `Bot ${botToken}` },
-      });
-      const roles = await rolesRes.json();
-      rolesMap[guild.id] = roles.filter((r) => r.name !== '@everyone');
+      let guild = client.guilds.cache.get(guildInfo.id);
+      if (!guild) {
+        guild = await client.guilds.fetch(guildInfo.id);
+      }
+
+      const botMember = await guild.members.fetch(client.user.id);
+
+      const botHighestRole = botMember.roles.highest;
+      const botHighestRolePosition = botHighestRole.position;
+
+      const manageableRoles = guild.roles.cache
+        .filter(role => role.position < botHighestRolePosition && role.name !== '@everyone')
+        .sort((a, b) => b.position - a.position);
+
+      rolesMap[guild.id] = manageableRoles.map(role => ({
+        id: role.id,
+        name: role.name,
+        position: role.position,
+      }));
     } catch (err) {
-      console.error(`Failed to fetch roles for guild ${guild.id}`, err);
-      rolesMap[guild.id] = [];
+      console.error(`Failed to get roles for guild ${guildInfo.id}`, err);
+      rolesMap[guildInfo.id] = [];
     }
   }
 

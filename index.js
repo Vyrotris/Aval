@@ -80,18 +80,11 @@ loadCommands();
 
 client.once('ready', async () => {
     console.log(`Logged in as ${client.user.tag}`);
-    const dashboardPath = path.join(__dirname, 'misc', 'dashboard.js');
-    const dashboard = spawn('node', [dashboardPath], {
-        stdio: 'inherit',
-        env: process.env
-    });
-    dashboard.on('close', code => {
-        console.log(`Dashboard process exited with code ${code}`);
-    });
     const activityName = config.activity.name || 'vyrotris.com';
     const activityType = ActivityType[config.activity.type] || ActivityType.Playing;
     client.user.setActivity(activityName, { type: activityType });
     autoRole(client);
+    require('./misc/dashboard');
     await deployCommands();
 });
 
