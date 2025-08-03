@@ -154,4 +154,4 @@ app.post('/dashboard/save', (req, res) => {
   res.redirect('/dashboard');
 });
 
-app.listen(process.env.SERVERCOUNT_API_PORT || 3040, () => console.log('Dashboard running'));
+app.listen(process.env.DASHBOARD_API_PORT || 3040, () => console.log('Dashboard running'));
