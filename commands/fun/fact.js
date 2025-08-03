@@ -6,7 +6,7 @@ module.exports = {
         .setName('fact')
         .setDescription('Get a random fun fact')
         .setIntegrationTypes([1])
-        .setContexts([1, 2]),
+        .setContexts([0, 1, 2]),
 
     async run(interaction) {
         try {

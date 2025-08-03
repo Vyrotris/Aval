@@ -7,7 +7,7 @@ module.exports = {
     .setName('wouldyourather')
     .setDescription('Play Would You Rather with everyone!')
     .setIntegrationTypes([1])
-    .setContexts([1, 2]),
+    .setContexts([0, 1, 2]),
 
   async run(interaction) {
     await interaction.deferReply();

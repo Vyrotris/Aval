@@ -6,7 +6,7 @@ module.exports = {
         .setName('qrcode')
         .setDescription('Generate a QR code for a URL or text')
         .setIntegrationTypes([1])
-        .setContexts([1, 2])
+        .setContexts([0, 1, 2])
         .addStringOption(option =>
             option
                 .setName('text')

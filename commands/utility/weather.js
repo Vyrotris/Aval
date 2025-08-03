@@ -65,7 +65,7 @@ module.exports = {
                 .setDescription('City name to get weather for')
                 .setRequired(true))
         .setIntegrationTypes([1])
-        .setContexts([1, 2]),
+        .setContexts([0, 1, 2]),
 
     async run(interaction) {
         try {

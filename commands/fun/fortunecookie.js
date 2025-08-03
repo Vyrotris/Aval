@@ -6,7 +6,7 @@ module.exports = {
     .setName('fortunecookie')
     .setDescription('Receive a random fortune cookie')
     .setIntegrationTypes([1])
-    .setContexts([1, 2]),
+    .setContexts([0, 1, 2]),
 
   async run(interaction) {
     await interaction.deferReply();

@@ -7,7 +7,7 @@ module.exports = {
         .setName('dadjoke')
         .setDescription('Get a random dad joke')
         .setIntegrationTypes([1])
-        .setContexts([1, 2]),
+        .setContexts([0, 1, 2]),
 
     async run(interaction) {
         try {

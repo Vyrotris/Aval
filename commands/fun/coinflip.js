@@ -7,7 +7,7 @@ module.exports = {
     .setName('coinflip')
     .setDescription('Flip a coin and get heads or tails')
     .setIntegrationTypes([1])
-    .setContexts([1, 2]),
+    .setContexts([0, 1, 2]),
 
   async run(interaction) {
     const outcomes = ['Heads', 'Tails'];

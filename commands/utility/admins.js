@@ -8,7 +8,7 @@ module.exports = {
         .setName('admins')
         .setDescription('Displays the current admins for this bot')
         .setIntegrationTypes([1])
-        .setContexts([1, 2]),
+        .setContexts([0, 1, 2]),
 
     async run(interaction) {
         try {

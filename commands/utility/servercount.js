@@ -23,7 +23,7 @@ module.exports = {
         .setName('servercount')
         .setDescription('Check how many servers you are in')
         .setIntegrationTypes([1])
-        .setContexts([1, 2]),
+        .setContexts([0, 1, 2]),
 
     async run(interaction) {
         const userId = interaction.user.id;

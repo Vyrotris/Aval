@@ -11,7 +11,7 @@ module.exports = {
                 .setDescription('The text to convert')
                 .setRequired(true))
         .setIntegrationTypes([1])
-        .setContexts([1, 2]),
+        .setContexts([0, 1, 2]),
 
     async run(interaction) {
         try {

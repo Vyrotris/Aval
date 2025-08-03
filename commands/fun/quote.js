@@ -6,7 +6,7 @@ module.exports = {
         .setName('quote')
         .setDescription('Get a random inspirational quote')
         .setIntegrationTypes([1])
-        .setContexts([1, 2]),
+        .setContexts([0, 1, 2]),
 
     async run(interaction) {
         try {

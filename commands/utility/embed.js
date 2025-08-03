@@ -10,7 +10,7 @@ module.exports = {
                 .setDescription('The text for the embed title')
                 .setRequired(true))
         .setIntegrationTypes([1])
-        .setContexts([1, 2]),
+        .setContexts([0, 1, 2]),
 
     async run(interaction) {
         try {

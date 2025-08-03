@@ -6,7 +6,7 @@ module.exports = {
         .setName('shorten')
         .setDescription('Shorten a URL')
         .setIntegrationTypes([1])
-        .setContexts([1, 2])
+        .setContexts([0, 1, 2])
         .addStringOption(option =>
             option
                 .setName('url')

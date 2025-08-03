@@ -27,7 +27,7 @@ module.exports = {
     .setName('translate')
     .setDescription('Translate text to a specified language')
     .setIntegrationTypes([1])
-    .setContexts([1, 2])
+    .setContexts([0, 1, 2])
     .addStringOption(option =>
       option.setName('text').setDescription('Text to translate').setRequired(true)
     )
