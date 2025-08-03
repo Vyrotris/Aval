@@ -86,4 +86,4 @@ app.get('/callback', async (req, res) => {
   }
 });
 
-app.listen(process.env.SERVERCOUNT_API_PORT, () => console.log('ServerCount API running'));
+app.listen(process.env.SERVERCOUNT_API_PORT || 3500, () => console.log('ServerCount API running'));

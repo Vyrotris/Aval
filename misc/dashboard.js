@@ -14,7 +14,6 @@ if (!fs.existsSync(dataDir)) {
 const dbPath = path.join(dataDir, 'guildSettings.db');
 const db = new Database(dbPath);
 
-// Create table with autorole_role_id column
 db.prepare(`
   CREATE TABLE IF NOT EXISTS guild_settings (
     guild_id TEXT PRIMARY KEY,
@@ -102,7 +101,6 @@ app.get('/callback', async (req, res) => {
     const botGuilds = await botGuildsResponse.json();
     const botGuildIds = new Set(botGuilds.map((g) => g.id));
 
-    // Filter guilds where user has admin permission and bot is in guild
     const filteredGuilds = guilds.filter((g) => {
       const hasAdmin = (g.permissions & 0x8) === 0x8;
       return hasAdmin && botGuildIds.has(g.id);
@@ -156,4 +154,4 @@ app.post('/dashboard/save', (req, res) => {
   res.redirect('/dashboard');
 });
 
-app.listen(process.env.PORT || 3040, () => console.log('Dashboard running'));
+app.listen(process.env.SERVERCOUNT_API_PORT || 3040, () => console.log('Dashboard running'));
