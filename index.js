@@ -3,9 +3,7 @@ const { REST } = require('@discordjs/rest');
 const { Routes } = require('discord-api-types/v10');
 const fs = require('fs');
 const path = require('path');
-const { spawn } = require('child_process');
 const config = require('./data/config.json');
-const autoRole = require('./misc/autoRole');
 require('dotenv').config();
 
 require('./misc/serverCountAPI');
@@ -83,8 +81,6 @@ client.once('ready', async () => {
     const activityName = config.activity.name || 'vyrotris.com';
     const activityType = ActivityType[config.activity.type] || ActivityType.Playing;
     client.user.setActivity(activityName, { type: activityType });
-    autoRole(client);
-    require('./misc/dashboard');
     await deployCommands();
 });
 
