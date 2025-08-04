@@ -40,4 +40,3 @@ node index.js
 
 ---
 ⚠️ Keep your `.env` file private. Never share your bot token or API keys.
-# <img src="https://raw.githubusercontent.com/Vyrotris/assets/refs/heads/main/aval-botinfo.png" width="600">
