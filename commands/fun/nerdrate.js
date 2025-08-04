@@ -3,8 +3,8 @@ const { getColor } = require('../../misc/colorUtil');
 
 module.exports = {
   data: new SlashCommandBuilder()
-    .setName('luck')
-    .setDescription('Check how lucky someone is today')
+    .setName('nerdrate')
+    .setDescription('Check how nerdy someone is')
     .addUserOption(option =>
       option.setName('target').setDescription('The user to check').setRequired(true)
     )
@@ -13,15 +13,15 @@ module.exports = {
 
   async run(interaction) {
     const target = interaction.options.getUser('target') || interaction.user;
-    const luck = Math.floor(Math.random() * 101);
+    const nerdiness = Math.floor(Math.random() * 101);
 
     const bar = (p) => '🟩'.repeat(Math.round(p / 10)) + '⬜'.repeat(10 - Math.round(p / 10));
 
     const embed = new EmbedBuilder()
-      .setTitle('🍀 Luck Meter')
-      .setDescription(`${target} has **${luck}%** luck today!`)
-      .addFields({ name: 'Luck', value: bar(luck) })
-      .setColor(getColor('secondary'))
+      .setTitle('🤓 Nerdiness Meter')
+      .setDescription(`${target} is **${nerdiness}%** nerdy!`)
+      .addFields({ name: 'Nerd Level', value: bar(nerdiness) })
+      .setColor(getColor('primary'))
       .setFooter({ text: `Requested by ${interaction.user.username}` })
       .setTimestamp();
 
