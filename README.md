@@ -1,6 +1,7 @@
 # <img src="https://raw.githubusercontent.com/Vyrotris/assets/refs/heads/main/avalcircle.png" width="25" style="vertical-align:middle; margin-right:6px;"> Aval
-<img src="https://raw.githubusercontent.com/Vyrotris/assets/refs/heads/main/aval-botinfo.png" width="600">
 **Aval** is a versatile personal Discord utility bot designed to provide powerful commands, automation, and fun features for your own use.
+
+# <img src="https://raw.githubusercontent.com/Vyrotris/assets/refs/heads/main/aval-botinfo.png" width="600">
 
 ## 📌 Features
 - Utility commands for personal use.
